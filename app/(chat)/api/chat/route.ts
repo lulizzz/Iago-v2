@@ -37,6 +37,8 @@ import { ChatSDKError } from '@/lib/errors';
 import type { ChatMessage } from '@/lib/types';
 import type { ChatModel } from '@/lib/ai/models';
 import type { VisibilityType } from '@/components/visibility-selector';
+import { logChatEvent, logError, logApiCall, logPerformance } from '@/lib/logger';
+import { logApiCall as middlewareLogApiCall } from '@/lib/middleware/logging';
 
 export const maxDuration = 60;
 
@@ -63,12 +65,16 @@ export function getStreamContext() {
 }
 
 export async function POST(request: Request) {
+  const startTime = Date.now();
+  middlewareLogApiCall('/api/chat', 'POST');
+  
   let requestBody: PostRequestBody;
 
   try {
     const json = await request.json();
     requestBody = postRequestBodySchema.parse(json);
-  } catch (_) {
+  } catch (error) {
+    logError(error as Error, { route: '/api/chat', method: 'POST' });
     return new ChatSDKError('bad_request:api').toResponse();
   }
 
@@ -88,10 +94,17 @@ export async function POST(request: Request) {
     const session = await auth();
 
     if (!session?.user) {
+      logChatEvent('unauthorized_access_attempt', { chatId: id });
       return new ChatSDKError('unauthorized:chat').toResponse();
     }
 
     const userType: UserType = session.user.type;
+    logChatEvent('chat_session_started', { 
+      userId: session.user.id, 
+      userType, 
+      chatId: id,
+      model: selectedChatModel
+    });
 
     const messageCount = await getMessageCountByUserId({
       id: session.user.id,
@@ -99,6 +112,12 @@ export async function POST(request: Request) {
     });
 
     if (messageCount > entitlementsByUserType[userType].maxMessagesPerDay) {
+      logChatEvent('rate_limit_exceeded', { 
+        userId: session.user.id, 
+        userType, 
+        messageCount,
+        limit: entitlementsByUserType[userType].maxMessagesPerDay
+      });
       return new ChatSDKError('rate_limit:chat').toResponse();
     }
 
@@ -219,36 +238,63 @@ export async function POST(request: Request) {
       return new Response(stream.pipeThrough(new JsonToSseTransformStream()));
     }
   } catch (error) {
+    const responseTime = Date.now() - startTime;
+    logPerformance('chat_api_call', responseTime);
+    
     if (error instanceof ChatSDKError) {
+      logError(error, { 
+        route: '/api/chat', 
+        method: 'POST', 
+        responseTime: `${responseTime}ms` 
+      });
       return error.toResponse();
     }
     
-    console.error('Unexpected error in chat API:', error);
+    logError(error as Error, { 
+      route: '/api/chat', 
+      method: 'POST', 
+      responseTime: `${responseTime}ms`,
+      type: 'unexpected_error'
+    });
     return new ChatSDKError('internal_server:api').toResponse();
   }
 }
 
 export async function DELETE(request: Request) {
+  middlewareLogApiCall('/api/chat', 'DELETE');
+  
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
 
   if (!id) {
+    logError(new Error('Missing chat ID in DELETE request'), { route: '/api/chat', method: 'DELETE' });
     return new ChatSDKError('bad_request:api').toResponse();
   }
 
   const session = await auth();
 
   if (!session?.user) {
+    logChatEvent('unauthorized_delete_attempt', { chatId: id });
     return new ChatSDKError('unauthorized:chat').toResponse();
   }
 
   const chat = await getChatById({ id });
 
   if (chat.userId !== session.user.id) {
+    logChatEvent('forbidden_delete_attempt', { 
+      chatId: id, 
+      userId: session.user.id, 
+      chatOwnerId: chat.userId 
+    });
     return new ChatSDKError('forbidden:chat').toResponse();
   }
 
   const deletedChat = await deleteChatById({ id });
+  logChatEvent('chat_deleted', { 
+    chatId: id, 
+    userId: session.user.id,
+    chatTitle: chat.title 
+  });
 
   return Response.json(deletedChat, { status: 200 });
 }
