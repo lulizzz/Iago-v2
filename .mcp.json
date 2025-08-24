@@ -1,0 +1,42 @@
+{
+    "mcpServers": {
+        "browsermcp": {
+            "command": "npx",
+            "args": [
+                "@browsermcp/mcp@latest"
+            ]
+        },
+        "supabase": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@supabase/mcp-server-supabase@latest",
+                "--read-only",
+                "--project-ref=relrzgbchilnyzrvbize"
+            ],
+            "env": {
+                "SUPABASE_ACCESS_TOKEN": "sbp_db49dfed5bbb8667c979478a5a07af1f0f15cb86"
+            }
+        },
+        "@21st-dev/magic": {
+            "command": "cmd",
+            "args": [
+                "/c",
+                "npx",
+                "-y",
+                "@21st-dev/magic@latest",
+                "API_KEY=236909dd530cd4ecae49427c4ac55a2eca628e748da7aa3f13ebc6684a50bcab"
+            ]
+        },
+        "@jpisnice/shadcn-ui-mcp-server": {
+       "command": "cmd",
+       "args": [
+         "/c",
+         "npx",
+         "-y",
+         "@jpisnice/shadcn-ui-mcp-server",
+         "--github-api-key",
+         "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"]
+       }
+    }
+}
