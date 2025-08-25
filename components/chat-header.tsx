@@ -8,8 +8,9 @@ import { ModelSelector } from '@/components/model-selector';
 import { SidebarToggle } from '@/components/sidebar-toggle';
 import { Button } from '@/components/ui/button';
 import { PlusIcon, VercelIcon } from './icons';
+import { BookIcon } from 'lucide-react';
 import { useSidebar } from './ui/sidebar';
-import { memo } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { type VisibilityType, VisibilitySelector } from './visibility-selector';
 import type { Session } from 'next-auth';
@@ -29,30 +30,57 @@ function PureChatHeader({
 }) {
   const router = useRouter();
   const { open } = useSidebar();
-
   const { width: windowWidth } = useWindowSize();
+  
+  // Fix hydration mismatch by ensuring client-side rendering
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  // Only show conditional buttons after component is mounted on client
+  const shouldShowHeaderButtons = isMounted && (!open || windowWidth < 768);
 
   return (
     <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2">
       <SidebarToggle />
 
-      {(!open || windowWidth < 768) && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              className="order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0"
-              onClick={() => {
-                router.push('/');
-                router.refresh();
-              }}
-            >
-              <PlusIcon />
-              <span className="md:sr-only">New Chat</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>New Chat</TooltipContent>
-        </Tooltip>
+      {shouldShowHeaderButtons && (
+        <div className="flex gap-2 order-2 md:order-1 ml-auto md:ml-0">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                className="md:px-2 px-2 md:h-fit"
+                asChild
+              >
+                <Link href="/lessons">
+                  <BookIcon className="h-4 w-4" />
+                  <span className="md:sr-only">Aulas</span>
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Aulas</TooltipContent>
+          </Tooltip>
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                className="md:px-2 px-2 md:h-fit"
+                onClick={() => {
+                  router.push('/');
+                  router.refresh();
+                }}
+              >
+                <PlusIcon />
+                <span className="md:sr-only">New Chat</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>New Chat</TooltipContent>
+          </Tooltip>
+        </div>
       )}
 
       {!isReadonly && (

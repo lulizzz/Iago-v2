@@ -168,3 +168,16 @@ export const stream = pgTable(
 );
 
 export type Stream = InferSelectModel<typeof stream>;
+
+export const lesson = pgTable('Lesson', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  module: text('module').notNull(),
+  title: text('title').notNull(),
+  link: text('link').notNull(),
+  content: text('content').notNull(),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  userId: uuid('userId').notNull()
+    .references(() => user.id),
+});
+
+export type Lesson = InferSelectModel<typeof lesson>;

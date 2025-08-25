@@ -27,6 +27,8 @@ import {
   type DBMessage,
   type Chat,
   stream,
+  lesson,
+  type Lesson,
 } from './schema';
 import type { ArtifactKind } from '@/components/artifact';
 import { generateUUID } from '../utils';
@@ -533,6 +535,67 @@ export async function getStreamIdsByChatId({ chatId }: { chatId: string }) {
     throw new ChatSDKError(
       'bad_request:database',
       'Failed to get stream ids by chat id',
+    );
+  }
+}
+
+export async function getLessons() {
+  try {
+    return await db
+      .select()
+      .from(lesson)
+      .orderBy(desc(lesson.createdAt));
+  } catch (error) {
+    throw new ChatSDKError(
+      'bad_request:database',
+      'Failed to get lessons',
+    );
+  }
+}
+
+export async function createLesson({
+  module,
+  title,
+  link,
+  content,
+  userId,
+}: {
+  module: string;
+  title: string;
+  link: string;
+  content: string;
+  userId?: string;
+}) {
+  try {
+    // If no userId provided, get the first user from database
+    let finalUserId = userId;
+    if (!finalUserId) {
+      const [firstUser] = await db.select({ id: user.id }).from(user).limit(1);
+      finalUserId = firstUser?.id;
+      
+      if (!finalUserId) {
+        throw new ChatSDKError(
+          'bad_request:database',
+          'No users found in database. A user is required to create lessons.',
+        );
+      }
+    }
+    
+    return await db
+      .insert(lesson)
+      .values({
+        module,
+        title,
+        link,
+        content,
+        userId: finalUserId,
+        createdAt: new Date(),
+      })
+      .returning();
+  } catch (error) {
+    throw new ChatSDKError(
+      'bad_request:database',
+      'Failed to create lesson',
     );
   }
 }

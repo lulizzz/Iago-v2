@@ -12,10 +12,10 @@
                 "-y",
                 "@supabase/mcp-server-supabase@latest",
                 "--read-only",
-                "--project-ref=relrzgbchilnyzrvbize"
+                "--project-ref=rdrdtkmbqupavxmhbrqu"
             ],
             "env": {
-"SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN_HERE"
+                "SUPABASE_ACCESS_TOKEN": "sbp_4861088c492530ff37f532781521cf626711cb49"
             }
         },
         "@21st-dev/magic": {
@@ -25,18 +25,19 @@
                 "npx",
                 "-y",
                 "@21st-dev/magic@latest",
-"API_KEY=YOUR_21ST_DEV_API_KEY_HERE"
+                "API_KEY=236909dd530cd4ecae49427c4ac55a2eca628e748da7aa3f13ebc6684a50bcab"
             ]
         },
         "@jpisnice/shadcn-ui-mcp-server": {
-       "command": "cmd",
-       "args": [
-         "/c",
-         "npx",
-         "-y",
-         "@jpisnice/shadcn-ui-mcp-server",
-         "--github-api-key",
-"YOUR_GITHUB_API_KEY_HERE"]
-       }
+            "command": "cmd",
+            "args": [
+                "/c",
+                "npx",
+                "-y",
+                "@jpisnice/shadcn-ui-mcp-server",
+                "--github-api-key",
+                "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"
+            ]
+        }
     }
 }
