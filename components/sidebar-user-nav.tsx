@@ -40,7 +40,7 @@ export function SidebarUserNav({ user }: { user: User }) {
                 <div className="flex flex-row gap-2">
                   <div className="size-6 bg-zinc-500/30 rounded-full animate-pulse" />
                   <span className="bg-zinc-500/30 text-transparent rounded-md animate-pulse">
-                    Loading auth status
+Carregando status da autenticação
                   </span>
                 </div>
                 <div className="animate-spin text-zinc-500">
@@ -60,7 +60,7 @@ export function SidebarUserNav({ user }: { user: User }) {
                   className="rounded-full"
                 />
                 <span data-testid="user-email" className="truncate">
-                  {isGuest ? 'Guest' : user?.email}
+  {isGuest ? 'Visitante' : user?.email}
                 </span>
                 <ChevronUp className="ml-auto" />
               </SidebarMenuButton>
@@ -76,7 +76,7 @@ export function SidebarUserNav({ user }: { user: User }) {
               className="cursor-pointer"
               onSelect={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
             >
-              {`Toggle ${resolvedTheme === 'light' ? 'dark' : 'light'} mode`}
+{`Alternar modo ${resolvedTheme === 'light' ? 'escuro' : 'claro'}`}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild data-testid="user-nav-item-auth">
@@ -88,7 +88,7 @@ export function SidebarUserNav({ user }: { user: User }) {
                     toast({
                       type: 'error',
                       description:
-                        'Checking authentication status, please try again!',
+'Verificando status da autenticação, tente novamente!',
                     });
 
                     return;
@@ -103,7 +103,7 @@ export function SidebarUserNav({ user }: { user: User }) {
                   }
                 }}
               >
-                {isGuest ? 'Login to your account' : 'Sign out'}
+{isGuest ? 'Entrar na sua conta' : 'Sair'}
               </button>
             </DropdownMenuItem>
           </DropdownMenuContent>

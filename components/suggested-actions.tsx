@@ -18,26 +18,26 @@ function PureSuggestedActions({
   sendMessage,
   selectedVisibilityType,
 }: SuggestedActionsProps) {
-  const suggestedActions = [
+const suggestedActions = [
     {
-      title: 'What are the advantages',
-      label: 'of using Next.js?',
-      action: 'What are the advantages of using Next.js?',
+      title: 'Me enquadro no PRONAF',
+      label: 'ou PRONAMP?',
+      action: 'Me enquadro no PRONAF ou PRONAMP?',
     },
     {
-      title: 'Write code to',
-      label: `demonstrate djikstra's algorithm`,
-      action: `Write code to demonstrate djikstra's algorithm`,
+      title: 'Quais documentos preciso',
+      label: 'para começar?',
+      action: 'Quais documentos preciso para começar?',
     },
     {
-      title: 'Help me write an essay',
-      label: `about silicon valley`,
-      action: `Help me write an essay about silicon valley`,
+      title: 'Quanto posso financiar',
+      label: 'para minha atividade?',
+      action: 'Quanto posso financiar para minha atividade?',
     },
-    {
-      title: 'What is the weather',
-      label: 'in San Francisco?',
-      action: 'What is the weather in San Francisco?',
+{
+      title: 'Como financiar um trator',
+      label: 'ou equipamento?',
+      action: 'Como financiar um trator ou equipamento?',
     },
   ];
 

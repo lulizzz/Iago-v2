@@ -8,8 +8,8 @@ import { SessionProvider } from 'next-auth/react';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chat.vercel.ai'),
-  title: 'Next.js Chatbot Template',
-  description: 'Next.js chatbot template using the AI SDK.',
+  title: 'Iago - Assistente Agro',
+  description: 'Assistente especializado em crédito rural e agronegócio.',
 };
 
 export const viewport = {
@@ -55,7 +55,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+lang="pt-BR"
       // `next-themes` injects an extra classname to the body element to avoid
       // visual flicker before hydration. Hence the `suppressHydrationWarning`
       // prop is necessary to avoid the React hydration mismatch warning.

@@ -12,5 +12,12 @@
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "browsermcp",
+    "supabase",
+    "@21st-dev/magic",
+    "@jpisnice/shadcn-ui-mcp-server"
+  ],
+  "enableAllProjectMcpServers": true
 }
