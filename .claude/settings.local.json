@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install:*)",
+      "Bash(openssl rand:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(git commit:*)",
+      "Bash(git add:*)",
+      "Bash(pnpm test:*)",
+      "Bash(git stash:*)",
+      "Bash(npx playwright test:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(gh:*)",
+      "Bash(git branch:*)",
+      "Bash(git switch:*)",
+      "Bash(git rm:*)"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "browsermcp",
+    "supabase",
+    "@21st-dev/magic",
+    "@jpisnice/shadcn-ui-mcp-server"
+  ]
+}
