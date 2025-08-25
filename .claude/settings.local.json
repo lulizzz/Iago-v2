@@ -10,7 +10,10 @@
       "Bash(git stash:*)",
       "Bash(npx playwright test:*)",
       "Bash(git checkout:*)",
-      "Bash(git merge:*)"
+      "Bash(git merge:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(gh:*)"
     ],
     "deny": [],
     "ask": []
