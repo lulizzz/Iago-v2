@@ -41,13 +41,34 @@ export const myProvider = isTestEnvironment
               }
             }
             
-            const webhookResponse = await fetch('http://localhost:3002/api/webhook', {
+            // Call external webhook directly
+            const webhookUrl = process.env.N8N_WEBHOOK_URL || 'https://mpawebhook.mltcorp.tec.br/webhook/v1/mpagro/prod/agente';
+            
+            // Prepare payload for external webhook
+            const webhookPayload = {
+              mensagem: {
+                texto: chatInput.trim()
+              },
+              usuario: {
+                id: 'chat-user',
+                nome: 'Chat User',
+                telefone: ''
+              }
+            };
+
+            const webhookResponse = await fetch(webhookUrl, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ chatInput }),
+              body: JSON.stringify(webhookPayload),
+              signal: AbortSignal.timeout(30000), // 30 seconds timeout
             });
+            
+            if (!webhookResponse.ok) {
+              throw new Error(`Webhook responded with status: ${webhookResponse.status}`);
+            }
+            
             const data = await webhookResponse.json();
-            const text = data.output || 'Resposta do webhook';
+            const text = data.output || data.mensagem || data.response || 'Resposta do webhook';
             
             return {
               rawCall: { rawPrompt: null, rawSettings: {} },
@@ -72,13 +93,34 @@ export const myProvider = isTestEnvironment
               }
             }
             
-            const webhookResponse = await fetch('http://localhost:3002/api/webhook', {
+            // Call external webhook directly
+            const webhookUrl = process.env.N8N_WEBHOOK_URL || 'https://mpawebhook.mltcorp.tec.br/webhook/v1/mpagro/prod/agente';
+            
+            // Prepare payload for external webhook
+            const webhookPayload = {
+              mensagem: {
+                texto: chatInput.trim()
+              },
+              usuario: {
+                id: 'chat-user-stream',
+                nome: 'Chat User',
+                telefone: ''
+              }
+            };
+
+            const webhookResponse = await fetch(webhookUrl, {
               method: 'POST', 
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ chatInput }),
+              body: JSON.stringify(webhookPayload),
+              signal: AbortSignal.timeout(30000), // 30 seconds timeout
             });
+            
+            if (!webhookResponse.ok) {
+              throw new Error(`Webhook responded with status: ${webhookResponse.status}`);
+            }
+            
             const data = await webhookResponse.json();
-            const text = data.output || 'Resposta do webhook';
+            const text = data.output || data.mensagem || data.response || 'Resposta do webhook';
             
             return {
               stream: simulateReadableStream({
