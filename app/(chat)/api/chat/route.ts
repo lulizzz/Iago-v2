@@ -37,8 +37,8 @@ import { ChatSDKError } from '@/lib/errors';
 import type { ChatMessage } from '@/lib/types';
 import type { ChatModel } from '@/lib/ai/models';
 import type { VisibilityType } from '@/components/visibility-selector';
-import { logChatEvent, logError, logApiCall, logPerformance } from '@/lib/logger';
-import { logApiCall as middlewareLogApiCall } from '@/lib/middleware/logging';
+import { logChatEvent, logError } from '@/lib/logger';
+import { logApiCall, logPerformance } from '@/lib/middleware/logging';
 
 export const maxDuration = 60;
 
@@ -66,7 +66,7 @@ export function getStreamContext() {
 
 export async function POST(request: Request) {
   const startTime = Date.now();
-  middlewareLogApiCall('/api/chat', 'POST');
+  logApiCall('/api/chat', 'POST');
   
   let requestBody: PostRequestBody;
 
@@ -261,7 +261,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  middlewareLogApiCall('/api/chat', 'DELETE');
+  logApiCall('/api/chat', 'DELETE');
   
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');

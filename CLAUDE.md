@@ -117,10 +117,25 @@ REDIS_URL=            # Redis for caching
 - Follow existing component patterns with shadcn/ui
 - Use TypeScript strict mode - all functions must be typed
 
+## Logging System
+- **Winston** with daily rotation for comprehensive logging
+- Structured logging with JSON format for production
+- Log categories: error, warn, info, http, debug
+- Helper functions in `/lib/logger.ts`:
+  - `logRequest()`, `logResponse()` - HTTP middleware logging
+  - `logError()` - Error tracking with stack traces
+  - `logChatEvent()`, `logAuthEvent()`, `logDatabaseEvent()` - Domain-specific logging
+- Log files stored in `/logs/` directory with automatic rotation (14d general, 30d errors)
+
 ## OpenTelemetry Integration
 - OTel infrastructure configured via `instrumentation.ts`
 - Ready for distributed tracing and metrics
 - Use existing `@opentelemetry/api` for custom spans
+
+## MCP Integration
+- MCP (Model Context Protocol) configured via `.mcp.json`
+- Available servers: browsermcp, supabase, @21st-dev/magic, shadcn-ui-mcp-server
+- Used for extending Claude Code capabilities with external tools
 
 ## Deployment Notes
 - Optimized for Vercel deployment
