@@ -8,16 +8,18 @@
       "Bash(git add:*)",
       "Bash(pnpm test:*)",
       "Bash(git stash:*)",
-      "Bash(npx playwright test:*)"
+      "Bash(npx playwright test:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)"
     ],
     "deny": [],
     "ask": []
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "browsermcp",
     "supabase",
     "@21st-dev/magic",
     "@jpisnice/shadcn-ui-mcp-server"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }
