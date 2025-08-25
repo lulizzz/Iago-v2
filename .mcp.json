@@ -15,7 +15,7 @@
                 "--project-ref=relrzgbchilnyzrvbize"
             ],
             "env": {
-                "SUPABASE_ACCESS_TOKEN": "sbp_db49dfed5bbb8667c979478a5a07af1f0f15cb86"
+"SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN_HERE"
             }
         },
         "@21st-dev/magic": {
@@ -25,7 +25,7 @@
                 "npx",
                 "-y",
                 "@21st-dev/magic@latest",
-                "API_KEY=236909dd530cd4ecae49427c4ac55a2eca628e748da7aa3f13ebc6684a50bcab"
+"API_KEY=YOUR_21ST_DEV_API_KEY_HERE"
             ]
         },
         "@jpisnice/shadcn-ui-mcp-server": {
@@ -36,7 +36,7 @@
          "-y",
          "@jpisnice/shadcn-ui-mcp-server",
          "--github-api-key",
-         "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"]
+"YOUR_GITHUB_API_KEY_HERE"]
        }
     }
 }
