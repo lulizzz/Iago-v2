@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Call external webhook
-    const webhookUrl = process.env.WEBHOOK_URL || 'https://mpawebhook.mltcorp.tec.br/webhook/v1/mpagro/prod/agente';
+    const webhookUrl = process.env.N8N_WEBHOOK_URL || 'https://mpawebhook.mltcorp.tec.br/webhook/v1/mpagro/prod/agente';
     
     logChatEvent('calling_external_webhook', {
       url: webhookUrl,
