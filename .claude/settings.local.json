@@ -8,7 +8,10 @@
       "Bash(git add:*)",
       "Bash(pnpm test:*)",
       "Bash(git stash:*)",
-      "Bash(npx playwright test:*)"
+      "Bash(npx playwright test:*)",
+      "Bash(git push:*)",
+      "Bash(git filter-branch:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []
