@@ -2,7 +2,9 @@ import {
   customProvider,
   extractReasoningMiddleware,
   wrapLanguageModel,
+  simulateReadableStream,
 } from 'ai';
+// import { MockLanguageModelV2 } from 'ai/test';
 import { xai } from '@ai-sdk/xai';
 import {
   artifactModel,
@@ -23,7 +25,80 @@ export const myProvider = isTestEnvironment
     })
   : customProvider({
       languageModels: {
-        'chat-model': xai('grok-2-vision-1212'),
+        'chat-model': {
+          doGenerate: async (params) => {
+            // Extract message text from prompt array
+            let chatInput = 'Mensagem de teste';
+            if (params.prompt && params.prompt.length > 0) {
+              const lastMessage = params.prompt[params.prompt.length - 1];
+              if (lastMessage.content && Array.isArray(lastMessage.content)) {
+                chatInput = lastMessage.content
+                  .filter(part => part.type === 'text')
+                  .map(part => part.text)
+                  .join(' ');
+              } else if (lastMessage.content) {
+                chatInput = lastMessage.content;
+              }
+            }
+            
+            const webhookResponse = await fetch('http://localhost:3002/api/webhook', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chatInput }),
+            });
+            const data = await webhookResponse.json();
+            const text = data.output || 'Resposta do webhook';
+            
+            return {
+              rawCall: { rawPrompt: null, rawSettings: {} },
+              finishReason: 'stop',
+              usage: { inputTokens: 10, outputTokens: 20, totalTokens: 30 },
+              content: [{ type: 'text', text }],
+              warnings: [],
+            };
+          },
+          doStream: async (params) => {
+            // Extract message text from prompt array
+            let chatInput = 'Mensagem de teste';
+            if (params.prompt && params.prompt.length > 0) {
+              const lastMessage = params.prompt[params.prompt.length - 1];
+              if (lastMessage.content && Array.isArray(lastMessage.content)) {
+                chatInput = lastMessage.content
+                  .filter(part => part.type === 'text')
+                  .map(part => part.text)
+                  .join(' ');
+              } else if (lastMessage.content) {
+                chatInput = lastMessage.content;
+              }
+            }
+            
+            const webhookResponse = await fetch('http://localhost:3002/api/webhook', {
+              method: 'POST', 
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ chatInput }),
+            });
+            const data = await webhookResponse.json();
+            const text = data.output || 'Resposta do webhook';
+            
+            return {
+              stream: simulateReadableStream({
+                chunkDelayInMs: 50,
+                initialDelayInMs: 100,
+                chunks: [
+                  { id: '1', type: 'text-start' },
+                  { id: '1', type: 'text-delta', delta: text },
+                  { id: '1', type: 'text-end' },
+                  {
+                    type: 'finish',
+                    finishReason: 'stop',
+                    usage: { inputTokens: 10, outputTokens: 20, totalTokens: 30 },
+                  },
+                ],
+              }),
+              rawCall: { rawPrompt: null, rawSettings: {} },
+            };
+          },
+        },
         'chat-model-reasoning': wrapLanguageModel({
           model: xai('grok-3-mini-beta'),
           middleware: extractReasoningMiddleware({ tagName: 'think' }),

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install:*)",
+      "Bash(openssl rand:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(git commit:*)",
+      "Bash(git add:*)",
+      "Bash(pnpm test:*)",
+      "Bash(git stash:*)",
+      "Bash(npx playwright test:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
