@@ -26,6 +26,10 @@ export const myProvider = isTestEnvironment
   : customProvider({
       languageModels: {
         'chat-model': {
+          specificationVersion: 'v2',
+          provider: 'custom',
+          modelId: 'chat-model',
+          supportedUrls: {} as Record<string, RegExp[]>,
           doGenerate: async (params) => {
             // Extract message text from prompt array
             let chatInput = 'Mensagem de teste';
@@ -34,7 +38,7 @@ export const myProvider = isTestEnvironment
               if (lastMessage.content && Array.isArray(lastMessage.content)) {
                 chatInput = lastMessage.content
                   .filter(part => part.type === 'text')
-                  .map(part => part.text)
+                  .map(part => (part as any).text)
                   .join(' ');
               } else if (lastMessage.content) {
                 chatInput = lastMessage.content;
@@ -86,7 +90,7 @@ export const myProvider = isTestEnvironment
               if (lastMessage.content && Array.isArray(lastMessage.content)) {
                 chatInput = lastMessage.content
                   .filter(part => part.type === 'text')
-                  .map(part => part.text)
+                  .map(part => (part as any).text)
                   .join(' ');
               } else if (lastMessage.content) {
                 chatInput = lastMessage.content;
