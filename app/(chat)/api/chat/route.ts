@@ -256,7 +256,7 @@ export async function POST(request: Request) {
       responseTime: `${responseTime}ms`,
       type: 'unexpected_error'
     });
-    return new ChatSDKError('internal_server:api').toResponse();
+    return new ChatSDKError('offline:api').toResponse();
   }
 }
 
