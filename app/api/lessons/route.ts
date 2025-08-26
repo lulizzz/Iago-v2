@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
     });
     
     // Call webhook
-    const webhookUrl = 'https://mpawebhook.mltcorp.tec.br/webhook/new-lesson';
+    const webhookUrl = process.env.LESSONS_WEBHOOK_URL || 'https://mpawebhook.mltcorp.tec.br/webhook/new-lesson';
     
     logChatEvent('calling_new_lesson_webhook', {
       url: webhookUrl,
