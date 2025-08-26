@@ -102,9 +102,6 @@ export async function POST(request: NextRequest) {
     });
     
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 seconds timeout
-      
       const webhookResponse = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
@@ -120,10 +117,7 @@ export async function POST(request: NextRequest) {
             createdAt: newLesson.createdAt,
           },
         }),
-        signal: controller.signal,
       });
-      
-      clearTimeout(timeoutId);
       
       logChatEvent('webhook_response', {
         status: webhookResponse.status,
@@ -138,19 +132,12 @@ export async function POST(request: NextRequest) {
         });
       }
     } catch (webhookError) {
-      const error = webhookError as Error;
-      const errorType = error.name === 'AbortError' ? 'webhook_timeout' : 'webhook_error';
-      
-      logError(error, {
+      logError(webhookError as Error, {
         route: '/api/lessons',
         webhookUrl,
         lessonId: newLesson.id,
-        type: errorType,
-        message: error.message,
+        type: 'webhook_error',
       });
-      
-      // Log for debugging - webhook failures should not prevent lesson creation
-      console.warn(`Webhook call failed for lesson ${newLesson.id}:`, error.message);
     }
     
     return NextResponse.json({
