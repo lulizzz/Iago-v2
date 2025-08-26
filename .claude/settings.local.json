@@ -21,7 +21,14 @@
       "Bash(pnpm db:push:*)",
       "Bash(curl:*)",
       "Bash(pnpm build:*)",
-      "Bash(npx next:*)"
+      "Bash(npx next:*)",
+      "Bash(vercel:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout:*)",
+      "Bash(pkill:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(pnpm add:*)"
     ],
     "deny": [],
     "ask": []
